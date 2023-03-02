@@ -1,0 +1,198 @@
+﻿@page "/counter"
+@using ChartJs.Blazor.PieChart
+@using Microsoft.Fast.Components.FluentUI
+
+@*Font*@
+<style>
+@@import url('https://fonts.googleapis.com/css2?family=Work+Sans');
+    body {
+        margin: 0;
+        font-family: 'Work Sans';
+        color: #4d4d4d;
+    }
+        
+</style>
+
+<PageTitle>Counter</PageTitle>
+
+@*Tab Start*@ 
+
+<FluentTabs activeId="TabTwo">
+    <FluentTab id="TabOne">Tab one</FluentTab>
+    <FluentTab id="TabTwo">Tab two</FluentTab>
+    <FluentTab id="TabThree">Tab three</FluentTab>
+    <FluentTabPanel>
+        @*Chart in Tab 1 Start*@
+        <Chart Config="_config"></Chart>
+
+        @code {
+        private PieConfig _config;
+
+        protected override void OnInitialized()
+        {
+            _config = new PieConfig
+            {
+                Options = new PieOptions
+                {
+                    Responsive = true,
+                    Title = new OptionsTitle
+                    {
+                        Display = true,
+                        Text = "ChartJs.Blazor Pie Chart"
+                    }
+                }
+            };
+
+            foreach (string color in new[] { "Red", "Yellow", "Green", "Blue" })
+            {
+            _config.Data.Labels.Add(color);
+            }
+
+            PieDataset<int> dataset = new PieDataset<int>(new[] { 6, 5, 3, 7 })
+            {
+                BackgroundColor = new[]
+            {
+        ColorUtil.ColorHexString(255, 99, 132), // Slice 1 aka "Red"
+        ColorUtil.ColorHexString(255, 205, 86), // Slice 2 aka "Yellow"
+        ColorUtil.ColorHexString(75, 192, 192), // Slice 3 aka "Green"
+        ColorUtil.ColorHexString(54, 162, 235), // Slice 4 aka "Blue"
+        }
+            };
+
+            _config.Data.Datasets.Add(dataset);
+        }
+        }
+        @*Chart in Tab 1 End*@
+        @*Dialog Tab 1 Start*@
+
+<div>
+    <FluentDialog @ref="MyFluentDialog" aria-label="Simple dialog" Modal=true TrapFocus=true @ondialogdismiss=OnDismiss>
+        <h2>Just a simple dialog</h2>
+
+        @*Accordian in Dialog Tab 1 Start*@
+<FluentAccordion ActiveId="@activeId" OnAccordionItemChange="HandleOnAccordionItemChange">
+    <FluentAccordionItem Heading="Panel one">
+        <FluentIcon Slot="start" Name="@FluentIcons.Globe" Size="@IconSize.Size20" Color=Color.Neutral />
+        Panel one content, using the 'start' slot for extra header content (in this case an icon)
+    </FluentAccordionItem>
+    <FluentAccordionItem Heading="Panel two">
+        <div slot="end">
+            #end#
+        </div>
+        Panel two content, using the 'end' slot for extra header content (in this case an HTML button)
+    </FluentAccordionItem>
+    <FluentAccordionItem Expanded="true" Heading="Panel three">
+        Panel three content
+    </FluentAccordionItem>
+</FluentAccordion>
+
+<p>Last changed accordion item: @changed?.Heading</p>
+
+
+@code {
+    string activeId = "accordion-1";
+
+    FluentAccordionItem? changed;
+
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
+}   
+        @*Accordian in Dialog Tab 1 end*@
+
+        <p>The 'Close dialog' button is automatically focussed.</p>
+        <p>The 'Another button' doesn't do anything other than showing receiving focus.</p>
+        <FluentButton Appearance="Appearance.Accent" Autofocus="true" @onclick="OnClose">Close dialog</FluentButton>
+        <FluentButton>Another button</FluentButton>
+    </FluentDialog>
+</div>
+
+<FluentButton Appearance=Appearance.Accent @onclick="OnOpen">Open dialog</FluentButton>
+
+@code {
+    private FluentDialog? MyFluentDialog;
+
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if (firstRender)
+            MyFluentDialog!.Hide();
+
+    }
+
+    private void OnOpen()
+    {
+        MyFluentDialog!.Show();
+    }
+
+    private void OnClose()
+    {
+        MyFluentDialog!.Hide();
+
+    }
+
+    private void OnDismiss(DialogEventArgs args)
+    {
+        if (args is not null && args.Reason is not null && args.Reason == "dismiss")
+        {
+            MyFluentDialog!.Hide();
+        }
+    }
+}
+@*Dialog Tab 1 End*@
+    </FluentTabPanel>
+    @*Tab 1 End*@
+    @*Tab 2 Start*@
+    <FluentTabPanel>
+         @*Link to Form Submission*@
+        <a href="url">link text</a>
+        @*End Link to Form Submission*@
+    </FluentTabPanel>
+    @*Tab 2 End*@
+    @*Tab 3 Start*@
+    <FluentTabPanel>
+        @*Card Left Monk Start*@
+<FluentCard style="width: 300px;"><img src="https://via.placeholder.com/300x200/414141" />
+    <div style="padding: 0 10px 10px; color: var(--neutral-foreground-rest);">
+        <h2>Heading</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maurisscelerisque varius ornare. Etiam convallis sollicitudin scelerisque.Maecenas in velit vehicula, aliquet orci et, consequat purus. Donec egetsodales lectus, vel sollicitudin ligula. Suspendisse volutpat auctor diam,vel mattis lorem venenatis in.</p>
+        <FluentButton>Button</FluentButton>
+    </div>
+</FluentCard>
+        @*Card Left Monk End*@
+        @*Card Right Saheb Start*@
+<FluentCard style="width: 300px;"><img src="https://via.placeholder.com/300x200/414141" />
+    <div style="padding: 0 10px 10px; color: var(--neutral-foreground-rest);">
+        <h2>Heading</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maurisscelerisque varius ornare. Etiam convallis sollicitudin scelerisque.Maecenas in velit vehicula, aliquet orci et, consequat purus. Donec egetsodales lectus, vel sollicitudin ligula. Suspendisse volutpat auctor diam,vel mattis lorem venenatis in.</p>
+        <FluentButton>Button</FluentButton>
+    </div>
+</FluentCard>
+        @*Card Right Saheb End*@
+    </FluentTabPanel>
+    @*Tab 3 End*@
+</FluentTabs>
+
+@*Tab End*@ 
+
+
+
+@*Counter Start*@ 
+
+<h1>Counter</h1>
+
+<p role="status">Current count: <FluentBadge Appearance="Appearance.Accent">@currentCount</FluentBadge></p>
+
+<FluentButton Appearance="Appearance.Accent" @onclick="IncrementCount">Click me</FluentButton>
+
+@code {
+    private int currentCount = 0;
+
+    private void IncrementCount()
+    {
+        currentCount++;
+    }
+}
+
+@*Counter End*@ 
